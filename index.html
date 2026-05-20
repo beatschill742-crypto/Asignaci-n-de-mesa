@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bodas de Oro | Federico & Jovita</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#FDFBF7] flex items-center justify-center min-h-screen p-4 font-serif text-gray-800">
+
+  <div class="max-w-md w-full bg-white rounded-sm shadow-xl p-8 border border-[#D4AF37] text-center relative">
+    
+    <h1 class="text-4xl italic text-[#B8860B] mb-2">Bodas de Oro</h1>
+    <h2 class="text-lg font-bold uppercase tracking-[0.2em] text-gray-600 mb-8">
+      Federico & Jovita
+    </h2>
+
+    <p class="text-sm text-gray-500 mb-4 italic">Ingresa tu nombre para buscar tu mesa:</p>
+
+    <input 
+      type="text" 
+      id="inputNombre" 
+      placeholder="Ej. Eduardo" 
+      class="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] text-center mb-6 font-sans"
+    >
+    
+    <button 
+      onclick="buscarMesa()"
+      class="w-full bg-[#B8860B] hover:bg-[#8B6508] text-white uppercase tracking-widest text-sm py-3 rounded transition-colors mb-8"
+    >
+      Buscar mi Mesa
+    </button>
+
+    <div id="resultado" class="hidden">
+      <p class="text-sm text-gray-400 uppercase tracking-widest mb-2">Asignado a</p>
+      <p id="nombreMostrado" class="text-xl font-medium mb-4 text-gray-700"></p>
+      
+      <div class="inline-block px-12 py-6 bg-[#FDF8E7] border border-[#E5C158] rounded">
+         <p class="text-xs tracking-widest uppercase text-[#8B6508] mb-2">Mesa</p>
+         <p id="mesaMostrada" class="text-6xl font-light text-[#8B6508]"></p>
+      </div>
+    </div>
+    
+    <p id="mensajeError" class="text-red-500 text-sm hidden mt-4 italic">No encontramos ese nombre. Intenta solo con tu primer nombre.</p>
+
+  </div>
+
+  <script>
+    // Aquí pegas tu lista del Excel
+    const invitados = [
+      { nombre: "Eduardo", mesa: 2 },
+      { nombre: "Carolina", mesa: 2 },
+      { nombre: "Zara", mesa: 2 },
+      { nombre: "Fernanda", mesa: 1 },
+      { nombre: "Vianey", mesa: 1 } // Nota: si hay nombres repetidos en el excel, ponles el apellido o inicial
+    ];
+
+    // Función para quitar acentos y hacer la búsqueda a prueba de errores
+    const normalizar = (texto) => texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+
+    function buscarMesa() {
+      const input = document.getElementById('inputNombre').value;
+      const resultadoDiv = document.getElementById('resultado');
+      const errorDiv = document.getElementById('mensajeError');
+      
+      if (!input) return;
+
+      const invitadoEncontrado = invitados.find(
+        invitado => normalizar(invitado.nombre).includes(normalizar(input))
+      );
+
+      if (invitadoEncontrado) {
+        document.getElementById('nombreMostrado').innerText = invitadoEncontrado.nombre;
+        document.getElementById('mesaMostrada').innerText = invitadoEncontrado.mesa;
+        resultadoDiv.classList.remove('hidden');
+        errorDiv.classList.add('hidden');
+      } else {
+        resultadoDiv.classList.add('hidden');
+        errorDiv.classList.remove('hidden');
+      }
+    }
+  </script>
+</body>
+</html>
