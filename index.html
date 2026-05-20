@@ -6,78 +6,1156 @@
   <title>Bodas de Oro | Federico & Jovita</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-[#FDFBF7] flex items-center justify-center min-h-screen p-4 font-serif text-gray-800">
+<body class="bg-[#FBF9F4] flex flex-col items-center justify-center min-h-screen p-4 antialiased text-stone-800">
 
-  <div class="max-w-md w-full bg-white rounded-sm shadow-xl p-8 border border-[#D4AF37] text-center relative">
+  <div class="w-full max-w-md bg-white border border-[#D4AF37]/40 shadow-[0_10px_30px_rgba(0,0,0,0.04)] rounded-sm p-8 text-center relative overflow-hidden">
     
-    <h1 class="text-4xl italic text-[#B8860B] mb-2">Bodas de Oro</h1>
-    <h2 class="text-lg font-bold uppercase tracking-[0.2em] text-gray-600 mb-8">
-      Federico & Jovita
-    </h2>
+    <!-- Decoración de esquinas -->
+    <div class="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-[#D4AF37]/30 m-4"></div>
+    <div class="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-[#D4AF37]/30 m-4"></div>
 
-    <p class="text-sm text-gray-500 mb-4 italic">Ingresa tu nombre para buscar tu mesa:</p>
+    <div class="my-6">
+      <span class="text-xs tracking-[0.3em] text-stone-400 uppercase block mb-2">Aniversario de Oro</span>
+      <h1 class="font-serif text-3xl italic text-[#B8860B]">Federico & Jovita</h1>
+      <div class="w-12 h-[1px] bg-[#D4AF37] mx-auto my-4"></div>
+    </div>
 
-    <input 
-      type="text" 
-      id="inputNombre" 
-      placeholder="Ej. Eduardo" 
-      class="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] text-center mb-6 font-sans"
-    >
-    
-    <button 
-      onclick="buscarMesa()"
-      class="w-full bg-[#B8860B] hover:bg-[#8B6508] text-white uppercase tracking-widest text-sm py-3 rounded transition-colors mb-8"
-    >
-      Buscar mi Mesa
-    </button>
+    <!-- Contenedor dinámico -->
+    <div id="contenido-invitado" class="hidden my-8">
+      <p class="text-xs tracking-widest text-stone-400 uppercase mb-1">Bienvenido(a)</p>
+      <h2 id="nombreMostrado" class="font-sans text-2xl font-light tracking-wide text-stone-700 mb-8"></h2>
 
-    <div id="resultado" class="hidden">
-      <p class="text-sm text-gray-400 uppercase tracking-widest mb-2">Asignado a</p>
-      <p id="nombreMostrado" class="text-xl font-medium mb-4 text-gray-700"></p>
-      
-      <div class="inline-block px-12 py-6 bg-[#FDF8E7] border border-[#E5C158] rounded">
-         <p class="text-xs tracking-widest uppercase text-[#8B6508] mb-2">Mesa</p>
-         <p id="mesaMostrada" class="text-6xl font-light text-[#8B6508]"></p>
+      <div class="inline-block bg-[#FDFBF7] border border-[#E6D5B8] rounded-sm px-10 py-6 my-2 shadow-sm">
+        <span class="text-xs tracking-[0.2em] text-stone-500 uppercase block mb-1">Tu Mesa Asignada</span>
+        <span id="mesaMostrada" class="font-serif text-6xl font-light text-[#8B6508] block"></span>
       </div>
     </div>
-    
-    <p id="mensajeError" class="text-red-500 text-sm hidden mt-4 italic">No encontramos ese nombre. Intenta solo con tu primer nombre.</p>
 
+    <div id="mensaje-error" class="my-12 hidden">
+      <p class="text-red-500 text-sm italic">Lo sentimos, no encontramos la invitación. Verifica el enlace proporcionado.</p>
+    </div>
+
+    <div class="mt-8 pt-4 border-t border-stone-100">
+      <p class="text-xs text-stone-400 italic">
+        31 de Mayo de 2026 • Estaremos muy felices de verte.
+      </p>
+    </div>
   </div>
 
   <script>
-    // Aquí pegas tu lista del Excel
     const invitados = [
-      { nombre: "Eduardo", mesa: 2 },
-      { nombre: "Carolina", mesa: 2 },
-      { nombre: "Zara", mesa: 2 },
-      { nombre: "Fernanda", mesa: 1 },
-      { nombre: "Vianey", mesa: 1 } // Nota: si hay nombres repetidos en el excel, ponles el apellido o inicial
-    ];
+    {
+        "id": "fernanda-m1",
+        "nombre": "Fernanda",
+        "mesa": 1
+    },
+    {
+        "id": "ricardo-m1",
+        "nombre": "Ricardo",
+        "mesa": 1
+    },
+    {
+        "id": "vianey-m1",
+        "nombre": "Vianey",
+        "mesa": 1
+    },
+    {
+        "id": "jesus-m1",
+        "nombre": "Jesús",
+        "mesa": 1
+    },
+    {
+        "id": "brenda-m1",
+        "nombre": "Brenda",
+        "mesa": 1
+    },
+    {
+        "id": "mateo-m1",
+        "nombre": "Mateo",
+        "mesa": 1
+    },
+    {
+        "id": "dany-m1",
+        "nombre": "Dany",
+        "mesa": 1
+    },
+    {
+        "id": "erick-m1",
+        "nombre": "Erick",
+        "mesa": 1
+    },
+    {
+        "id": "jorge-m1",
+        "nombre": "Jorge",
+        "mesa": 1
+    },
+    {
+        "id": "flor-m1",
+        "nombre": "FLOR",
+        "mesa": 1
+    },
+    {
+        "id": "zara-m2",
+        "nombre": "Zara",
+        "mesa": 2
+    },
+    {
+        "id": "eduardo-m2",
+        "nombre": "Eduardo",
+        "mesa": 2
+    },
+    {
+        "id": "vianey-m2",
+        "nombre": "Vianey",
+        "mesa": 2
+    },
+    {
+        "id": "jesus-m2",
+        "nombre": "Jesús",
+        "mesa": 2
+    },
+    {
+        "id": "arath-m2",
+        "nombre": "Arath",
+        "mesa": 2
+    },
+    {
+        "id": "majo-leo-m2",
+        "nombre": "Majo Leo",
+        "mesa": 2
+    },
+    {
+        "id": "carolina-m2",
+        "nombre": "Carolina",
+        "mesa": 2
+    },
+    {
+        "id": "sharon-m2",
+        "nombre": "Sharon",
+        "mesa": 2
+    },
+    {
+        "id": "alexa-m2",
+        "nombre": "Alexa",
+        "mesa": 2
+    },
+    {
+        "id": "andy-m3",
+        "nombre": "Andy",
+        "mesa": 3
+    },
+    {
+        "id": "arturo-m3",
+        "nombre": "Arturo",
+        "mesa": 3
+    },
+    {
+        "id": "july-m3",
+        "nombre": "July",
+        "mesa": 3
+    },
+    {
+        "id": "juan-m3",
+        "nombre": "Juan",
+        "mesa": 3
+    },
+    {
+        "id": "eduardo-m3",
+        "nombre": "Eduardo",
+        "mesa": 3
+    },
+    {
+        "id": "vaneza-m3",
+        "nombre": "Vaneza",
+        "mesa": 3
+    },
+    {
+        "id": "paola-m3",
+        "nombre": "Paola",
+        "mesa": 3
+    },
+    {
+        "id": "naty-m3",
+        "nombre": "Naty",
+        "mesa": 3
+    },
+    {
+        "id": "alan-m3",
+        "nombre": "Alan",
+        "mesa": 3
+    },
+    {
+        "id": "diego-m3",
+        "nombre": "Diego",
+        "mesa": 3
+    },
+    {
+        "id": "eleazar-m4",
+        "nombre": "Eleazar",
+        "mesa": 4
+    },
+    {
+        "id": "aby-m4",
+        "nombre": "Aby",
+        "mesa": 4
+    },
+    {
+        "id": "minerva-m4",
+        "nombre": "Minerva",
+        "mesa": 4
+    },
+    {
+        "id": "juan-m4",
+        "nombre": "Juan",
+        "mesa": 4
+    },
+    {
+        "id": "alejandra-m4",
+        "nombre": "Alejandra",
+        "mesa": 4
+    },
+    {
+        "id": "daniel-m4",
+        "nombre": "Daniel",
+        "mesa": 4
+    },
+    {
+        "id": "guillermo-m4",
+        "nombre": "Guillermo",
+        "mesa": 4
+    },
+    {
+        "id": "josue-m4",
+        "nombre": "Josué",
+        "mesa": 4
+    },
+    {
+        "id": "yaretzi-m4",
+        "nombre": "Yaretzi",
+        "mesa": 4
+    },
+    {
+        "id": "dani-m4",
+        "nombre": "DANI",
+        "mesa": 4
+    },
+    {
+        "id": "pancho-m5",
+        "nombre": "Pancho",
+        "mesa": 5
+    },
+    {
+        "id": "carolina-m5",
+        "nombre": "Carolina",
+        "mesa": 5
+    },
+    {
+        "id": "lety-m5",
+        "nombre": "Lety",
+        "mesa": 5
+    },
+    {
+        "id": "alfredo-m5",
+        "nombre": "Alfredo",
+        "mesa": 5
+    },
+    {
+        "id": "javier-m5",
+        "nombre": "Javier",
+        "mesa": 5
+    },
+    {
+        "id": "norma-m5",
+        "nombre": "Norma",
+        "mesa": 5
+    },
+    {
+        "id": "samuel-m5",
+        "nombre": "Samuel",
+        "mesa": 5
+    },
+    {
+        "id": "vania-m5",
+        "nombre": "Vania",
+        "mesa": 5
+    },
+    {
+        "id": "hijo-m5",
+        "nombre": "hijo",
+        "mesa": 5
+    },
+    {
+        "id": "rodolfo-m5",
+        "nombre": "RODOLFO",
+        "mesa": 5
+    },
+    {
+        "id": "elvira-m6",
+        "nombre": "Elvira",
+        "mesa": 6
+    },
+    {
+        "id": "agustin-m6",
+        "nombre": "Agustín",
+        "mesa": 6
+    },
+    {
+        "id": "sra.queta-m6",
+        "nombre": "Sra.Queta",
+        "mesa": 6
+    },
+    {
+        "id": "nelly-m6",
+        "nombre": "Nelly",
+        "mesa": 6
+    },
+    {
+        "id": "jazmin-m6",
+        "nombre": "Jazmín",
+        "mesa": 6
+    },
+    {
+        "id": "izcoatl-m6",
+        "nombre": "Izcóatl",
+        "mesa": 6
+    },
+    {
+        "id": "sofia-m6",
+        "nombre": "Sofía",
+        "mesa": 6
+    },
+    {
+        "id": "issac-m6",
+        "nombre": "Issac",
+        "mesa": 6
+    },
+    {
+        "id": "ximena-m6",
+        "nombre": "Ximena",
+        "mesa": 6
+    },
+    {
+        "id": "abril-m6",
+        "nombre": "Abril",
+        "mesa": 6
+    },
+    {
+        "id": "emir-m6",
+        "nombre": "Emir",
+        "mesa": 6
+    },
+    {
+        "id": "corina-m7",
+        "nombre": "Corina",
+        "mesa": 7
+    },
+    {
+        "id": "pedro-m7",
+        "nombre": "Pedro",
+        "mesa": 7
+    },
+    {
+        "id": "diana-m7",
+        "nombre": "Diana",
+        "mesa": 7
+    },
+    {
+        "id": "mario-m7",
+        "nombre": "Mario",
+        "mesa": 7
+    },
+    {
+        "id": "mama-de-pedro-m7",
+        "nombre": "Mamá de Pedro",
+        "mesa": 7
+    },
+    {
+        "id": "papa-de-pedro-m7",
+        "nombre": "Papá de Pedro",
+        "mesa": 7
+    },
+    {
+        "id": "vale-m7",
+        "nombre": "Vale",
+        "mesa": 7
+    },
+    {
+        "id": "naty-m7",
+        "nombre": "Naty",
+        "mesa": 7
+    },
+    {
+        "id": "angel-m7",
+        "nombre": "Ángel",
+        "mesa": 7
+    },
+    {
+        "id": "mario-chiquito-m7",
+        "nombre": "Mario chiquito",
+        "mesa": 7
+    },
+    {
+        "id": "penelope-m8",
+        "nombre": "Penélope",
+        "mesa": 8
+    },
+    {
+        "id": "esposo-m8",
+        "nombre": "Esposo",
+        "mesa": 8
+    },
+    {
+        "id": "fabiola-m8",
+        "nombre": "Fabiola",
+        "mesa": 8
+    },
+    {
+        "id": "silvia-m8",
+        "nombre": "Silvia",
+        "mesa": 8
+    },
+    {
+        "id": "ma.-luisa-m8",
+        "nombre": "Ma. Luisa",
+        "mesa": 8
+    },
+    {
+        "id": "esposo-m8",
+        "nombre": "esposo",
+        "mesa": 8
+    },
+    {
+        "id": "ivan-m8",
+        "nombre": "Iván",
+        "mesa": 8
+    },
+    {
+        "id": "nazarea-m8",
+        "nombre": "Nazarea",
+        "mesa": 8
+    },
+    {
+        "id": "elizabeth-acevedo-m8",
+        "nombre": "Elizabeth Acevedo",
+        "mesa": 8
+    },
+    {
+        "id": "2-hijos-m8",
+        "nombre": "2 hijos",
+        "mesa": 8
+    },
+    {
+        "id": "joana-m9",
+        "nombre": "Joana",
+        "mesa": 9
+    },
+    {
+        "id": "tania-m9",
+        "nombre": "Tania",
+        "mesa": 9
+    },
+    {
+        "id": "esposo-m9",
+        "nombre": "esposo",
+        "mesa": 9
+    },
+    {
+        "id": "moni-mk-m9",
+        "nombre": "Moni mk",
+        "mesa": 9
+    },
+    {
+        "id": "ma-elena-m9",
+        "nombre": "Ma Elena",
+        "mesa": 9
+    },
+    {
+        "id": "elsa-m9",
+        "nombre": "Elsa",
+        "mesa": 9
+    },
+    {
+        "id": "esposo-m9",
+        "nombre": "esposo",
+        "mesa": 9
+    },
+    {
+        "id": "paty-m10",
+        "nombre": "Paty",
+        "mesa": 10
+    },
+    {
+        "id": "samuel-m10",
+        "nombre": "Samuel",
+        "mesa": 10
+    },
+    {
+        "id": "karla-m10",
+        "nombre": "Karla",
+        "mesa": 10
+    },
+    {
+        "id": "liz-aguilar-m10",
+        "nombre": "Liz Aguilar",
+        "mesa": 10
+    },
+    {
+        "id": "liz-lopez-m10",
+        "nombre": "Liz López",
+        "mesa": 10
+    },
+    {
+        "id": "adry-meyer-m10",
+        "nombre": "Adry Meyer",
+        "mesa": 10
+    },
+    {
+        "id": "adry-m10",
+        "nombre": "Adry",
+        "mesa": 10
+    },
+    {
+        "id": "leoncito-m10",
+        "nombre": "Leoncito",
+        "mesa": 10
+    },
+    {
+        "id": "fer-m10",
+        "nombre": "Fer",
+        "mesa": 10
+    },
+    {
+        "id": "caty-m10",
+        "nombre": "Caty",
+        "mesa": 10
+    },
+    {
+        "id": "xime-m10",
+        "nombre": "Xime",
+        "mesa": 10
+    },
+    {
+        "id": "eve-m10",
+        "nombre": "Eve",
+        "mesa": 10
+    },
+    {
+        "id": "diana-m10",
+        "nombre": "Diana",
+        "mesa": 10
+    },
+    {
+        "id": "xime-m11",
+        "nombre": "Xime",
+        "mesa": 11
+    },
+    {
+        "id": "eve-m11",
+        "nombre": "Eve",
+        "mesa": 11
+    },
+    {
+        "id": "dianita-m11",
+        "nombre": "Dianita",
+        "mesa": 11
+    },
+    {
+        "id": "ivon-m11",
+        "nombre": "Ivón",
+        "mesa": 11
+    },
+    {
+        "id": "esposo-m11",
+        "nombre": "Esposo",
+        "mesa": 11
+    },
+    {
+        "id": "karla-m12",
+        "nombre": "Karla",
+        "mesa": 12
+    },
+    {
+        "id": "vale-m12",
+        "nombre": "Vale",
+        "mesa": 12
+    },
+    {
+        "id": "laura-m12",
+        "nombre": "Laura",
+        "mesa": 12
+    },
+    {
+        "id": "ivan-m12",
+        "nombre": "Iván",
+        "mesa": 12
+    },
+    {
+        "id": "carlota-m12",
+        "nombre": "Carlota",
+        "mesa": 12
+    },
+    {
+        "id": "abel-m12",
+        "nombre": "Abel",
+        "mesa": 12
+    },
+    {
+        "id": "chaya-m13",
+        "nombre": "Chaya",
+        "mesa": 13
+    },
+    {
+        "id": "chucha-m13",
+        "nombre": "Chucha",
+        "mesa": 13
+    },
+    {
+        "id": "adriana-m13",
+        "nombre": "Adriana",
+        "mesa": 13
+    },
+    {
+        "id": "tobi-m13",
+        "nombre": "Tobi",
+        "mesa": 13
+    },
+    {
+        "id": "viri-m13",
+        "nombre": "Viri",
+        "mesa": 13
+    },
+    {
+        "id": "salvador-m13",
+        "nombre": "Salvador",
+        "mesa": 13
+    },
+    {
+        "id": "delia-m13",
+        "nombre": "Delia",
+        "mesa": 13
+    },
+    {
+        "id": "mama-martha-m15",
+        "nombre": "Mamá Martha",
+        "mesa": 15
+    },
+    {
+        "id": "patricia-m15",
+        "nombre": "Patricia",
+        "mesa": 15
+    },
+    {
+        "id": "claudia-m15",
+        "nombre": "Claudia",
+        "mesa": 15
+    },
+    {
+        "id": "acompanante-m15",
+        "nombre": "Acompañante",
+        "mesa": 15
+    },
+    {
+        "id": "jesus-dominguez-m15",
+        "nombre": "Jesús Domínguez",
+        "mesa": 15
+    },
+    {
+        "id": "jesus-m15",
+        "nombre": "Jesús",
+        "mesa": 15
+    },
+    {
+        "id": "jesus-m15",
+        "nombre": "Jesús",
+        "mesa": 15
+    },
+    {
+        "id": "yulisa-m15",
+        "nombre": "Yulisa",
+        "mesa": 15
+    },
+    {
+        "id": "acompanante-m15",
+        "nombre": "Acompañante",
+        "mesa": 15
+    },
+    {
+        "id": "claudia-trejo-7-m16",
+        "nombre": "Claudia Trejo (7)",
+        "mesa": 16
+    },
+    {
+        "id": "hugo-m17",
+        "nombre": "Hugo",
+        "mesa": 17
+    },
+    {
+        "id": "erika-m17",
+        "nombre": "Erika",
+        "mesa": 17
+    },
+    {
+        "id": "hijo-m17",
+        "nombre": "hijo",
+        "mesa": 17
+    },
+    {
+        "id": "marlen-m17",
+        "nombre": "Marlen",
+        "mesa": 17
+    },
+    {
+        "id": "osvaldo-m17",
+        "nombre": "Osvaldo",
+        "mesa": 17
+    },
+    {
+        "id": "ingrid-m17",
+        "nombre": "Ingrid",
+        "mesa": 17
+    },
+    {
+        "id": "bibiana-m17",
+        "nombre": "Bibiana",
+        "mesa": 17
+    },
+    {
+        "id": "isabella-m17",
+        "nombre": "Isabella",
+        "mesa": 17
+    },
+    {
+        "id": "fernanda-m17",
+        "nombre": "Fernanda",
+        "mesa": 17
+    },
+    {
+        "id": "ceci-m18",
+        "nombre": "Ceci",
+        "mesa": 18
+    },
+    {
+        "id": "enrique-m18",
+        "nombre": "Enrique",
+        "mesa": 18
+    },
+    {
+        "id": "gaby-m18",
+        "nombre": "Gaby",
+        "mesa": 18
+    },
+    {
+        "id": "ivan-m18",
+        "nombre": "Iván",
+        "mesa": 18
+    },
+    {
+        "id": "hijo-m18",
+        "nombre": "hijo",
+        "mesa": 18
+    },
+    {
+        "id": "hija-m18",
+        "nombre": "hija",
+        "mesa": 18
+    },
+    {
+        "id": "mary-m18",
+        "nombre": "Mary",
+        "mesa": 18
+    },
+    {
+        "id": "hijo-m18",
+        "nombre": "hijo",
+        "mesa": 18
+    },
+    {
+        "id": "hija-m18",
+        "nombre": "hija",
+        "mesa": 18
+    },
+    {
+        "id": "padrino-mario-m19",
+        "nombre": "Padrino Mario",
+        "mesa": 19
+    },
+    {
+        "id": "liz-m19",
+        "nombre": "Liz",
+        "mesa": 19
+    },
+    {
+        "id": "gamaliel-m19",
+        "nombre": "Gamaliel",
+        "mesa": 19
+    },
+    {
+        "id": "mariana-m19",
+        "nombre": "Mariana",
+        "mesa": 19
+    },
+    {
+        "id": "gabriel-m19",
+        "nombre": "Gabriel",
+        "mesa": 19
+    },
+    {
+        "id": "majo-m19",
+        "nombre": "Majo",
+        "mesa": 19
+    },
+    {
+        "id": "sandra-m19",
+        "nombre": "Sandra",
+        "mesa": 19
+    },
+    {
+        "id": "fernando-m19",
+        "nombre": "Fernando",
+        "mesa": 19
+    },
+    {
+        "id": "monce-m19",
+        "nombre": "Monce",
+        "mesa": 19
+    },
+    {
+        "id": "vero-m19",
+        "nombre": "Vero",
+        "mesa": 19
+    },
+    {
+        "id": "jonathan-m19",
+        "nombre": "JONATHAN",
+        "mesa": 19
+    },
+    {
+        "id": "maria-m20",
+        "nombre": "María",
+        "mesa": 20
+    },
+    {
+        "id": "lulu-m20",
+        "nombre": "Lulú",
+        "mesa": 20
+    },
+    {
+        "id": "tono-m20",
+        "nombre": "Toño",
+        "mesa": 20
+    },
+    {
+        "id": "hijo-m20",
+        "nombre": "hijo",
+        "mesa": 20
+    },
+    {
+        "id": "hijo-m20",
+        "nombre": "hijo",
+        "mesa": 20
+    },
+    {
+        "id": "lorena-m20",
+        "nombre": "Lorena",
+        "mesa": 20
+    },
+    {
+        "id": "hijo-m20",
+        "nombre": "hijo",
+        "mesa": 20
+    },
+    {
+        "id": "hija-m20",
+        "nombre": "hija",
+        "mesa": 20
+    },
+    {
+        "id": "rogelio-y-esposa-m20",
+        "nombre": "Rogelio y Esposa",
+        "mesa": 20
+    },
+    {
+        "id": "liz-y-melanie-m20",
+        "nombre": "Liz y Melanie",
+        "mesa": 20
+    },
+    {
+        "id": "mago-m21",
+        "nombre": "Mago",
+        "mesa": 21
+    },
+    {
+        "id": "juan-m21",
+        "nombre": "Juan",
+        "mesa": 21
+    },
+    {
+        "id": "alejandra-m21",
+        "nombre": "Alejandra",
+        "mesa": 21
+    },
+    {
+        "id": "hija-m21",
+        "nombre": "hija",
+        "mesa": 21
+    },
+    {
+        "id": "hija-m21",
+        "nombre": "hija",
+        "mesa": 21
+    },
+    {
+        "id": "aurora-m21",
+        "nombre": "Aurora",
+        "mesa": 21
+    },
+    {
+        "id": "hijo-m21",
+        "nombre": "hijo",
+        "mesa": 21
+    },
+    {
+        "id": "hijo-m21",
+        "nombre": "hijo",
+        "mesa": 21
+    },
+    {
+        "id": "hija-m21",
+        "nombre": "hija",
+        "mesa": 21
+    },
+    {
+        "id": "esposo-m21",
+        "nombre": "esposo",
+        "mesa": 21
+    },
+    {
+        "id": "lalo-m22",
+        "nombre": "Lalo",
+        "mesa": 22
+    },
+    {
+        "id": "reina-m22",
+        "nombre": "Reina",
+        "mesa": 22
+    },
+    {
+        "id": "hija-m22",
+        "nombre": "hija",
+        "mesa": 22
+    },
+    {
+        "id": "hija-m22",
+        "nombre": "hija",
+        "mesa": 22
+    },
+    {
+        "id": "hija-m22",
+        "nombre": "hija",
+        "mesa": 22
+    },
+    {
+        "id": "marilu-m22",
+        "nombre": "Marilú",
+        "mesa": 22
+    },
+    {
+        "id": "moni-m22",
+        "nombre": "Moni",
+        "mesa": 22
+    },
+    {
+        "id": "hija-m22",
+        "nombre": "hija",
+        "mesa": 22
+    },
+    {
+        "id": "hijo-m22",
+        "nombre": "hijo",
+        "mesa": 22
+    },
+    {
+        "id": "esposo-m22",
+        "nombre": "esposo",
+        "mesa": 22
+    },
+    {
+        "id": "hortencia-m23",
+        "nombre": "Hortencia",
+        "mesa": 23
+    },
+    {
+        "id": "miriam-m23",
+        "nombre": "Miriam",
+        "mesa": 23
+    },
+    {
+        "id": "paco-m23",
+        "nombre": "Paco",
+        "mesa": 23
+    },
+    {
+        "id": "jazmin-m23",
+        "nombre": "Jazmín",
+        "mesa": 23
+    },
+    {
+        "id": "enrique-m23",
+        "nombre": "Enrique",
+        "mesa": 23
+    },
+    {
+        "id": "esposa-m23",
+        "nombre": "esposa",
+        "mesa": 23
+    },
+    {
+        "id": "daniel-m23",
+        "nombre": "Daniel",
+        "mesa": 23
+    },
+    {
+        "id": "esposa-m23",
+        "nombre": "Esposa",
+        "mesa": 23
+    },
+    {
+        "id": "pancho-m23",
+        "nombre": "Pancho",
+        "mesa": 23
+    },
+    {
+        "id": "malena-m23",
+        "nombre": "MALENA",
+        "mesa": 23
+    },
+    {
+        "id": "jorge-m24",
+        "nombre": "Jorge",
+        "mesa": 24
+    },
+    {
+        "id": "monica-m24",
+        "nombre": "Mónica",
+        "mesa": 24
+    },
+    {
+        "id": "hijo-m24",
+        "nombre": "hijo",
+        "mesa": 24
+    },
+    {
+        "id": "hijo-m24",
+        "nombre": "hijo",
+        "mesa": 24
+    },
+    {
+        "id": "patricia-m24",
+        "nombre": "Patricia",
+        "mesa": 24
+    },
+    {
+        "id": "ileana-m24",
+        "nombre": "Ileana",
+        "mesa": 24
+    },
+    {
+        "id": "esposo-m24",
+        "nombre": "esposo",
+        "mesa": 24
+    },
+    {
+        "id": "hija-m24",
+        "nombre": "hija",
+        "mesa": 24
+    },
+    {
+        "id": "hija-m24",
+        "nombre": "hija",
+        "mesa": 24
+    },
+    {
+        "id": "beto-m24",
+        "nombre": "Beto",
+        "mesa": 24
+    },
+    {
+        "id": "chabela-m25",
+        "nombre": "Chabela",
+        "mesa": 25
+    },
+    {
+        "id": "lety-m25",
+        "nombre": "Lety",
+        "mesa": 25
+    },
+    {
+        "id": "chabelita-m25",
+        "nombre": "Chabelita",
+        "mesa": 25
+    },
+    {
+        "id": "lupita-m25",
+        "nombre": "Lupita",
+        "mesa": 25
+    },
+    {
+        "id": "israel-m25",
+        "nombre": "Israel",
+        "mesa": 25
+    },
+    {
+        "id": "lupe-m25",
+        "nombre": "Lupe",
+        "mesa": 25
+    },
+    {
+        "id": "micaela-m25",
+        "nombre": "Micaela",
+        "mesa": 25
+    },
+    {
+        "id": "jose-luis-m25",
+        "nombre": "Jose Luis",
+        "mesa": 25
+    },
+    {
+        "id": "mauricio-m25",
+        "nombre": "Mauricio",
+        "mesa": 25
+    },
+    {
+        "id": "eliza-m25",
+        "nombre": "Eliza",
+        "mesa": 25
+    },
+    {
+        "id": "luisa-m25",
+        "nombre": "LUISA",
+        "mesa": 25
+    }
+];
 
-    // Función para quitar acentos y hacer la búsqueda a prueba de errores
-    const normalizar = (texto) => texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+    // Capturar parámetro ?id= de la URL
+    const params = new URLSearchParams(window.location.search);
+    const idInvitado = params.get('id');
 
-    function buscarMesa() {
-      const input = document.getElementById('inputNombre').value;
-      const resultadoDiv = document.getElementById('resultado');
-      const errorDiv = document.getElementById('mensajeError');
-      
-      if (!input) return;
-
-      const invitadoEncontrado = invitados.find(
-        invitado => normalizar(invitado.nombre).includes(normalizar(input))
+    if (idInvitado) {
+      const encontrado = invitados.find(
+        i => i.id.toLowerCase() === idInvitado.toLowerCase()
       );
 
-      if (invitadoEncontrado) {
-        document.getElementById('nombreMostrado').innerText = invitadoEncontrado.nombre;
-        document.getElementById('mesaMostrada').innerText = invitadoEncontrado.mesa;
-        resultadoDiv.classList.remove('hidden');
-        errorDiv.classList.add('hidden');
+      if (encontrado) {
+        document.getElementById('nombreMostrado').innerText = encontrado.nombre;
+        document.getElementById('mesaMostrada').innerText = encontrado.mesa;
+        document.getElementById('contenido-invitado').classList.remove('hidden');
       } else {
-        resultadoDiv.classList.add('hidden');
-        errorDiv.classList.remove('hidden');
+        document.getElementById('mensaje-error').classList.remove('hidden');
       }
+    } else {
+       // Si entran sin link, podemos mostrar el error o un mensaje amigable
+       document.getElementById('mensaje-error').innerText = "Por favor, accede usando el enlace personal que te enviamos.";
+       document.getElementById('mensaje-error').classList.remove('hidden');
     }
   </script>
 </body>
