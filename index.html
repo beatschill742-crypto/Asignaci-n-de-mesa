@@ -1,111 +1,170 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pase Digital | Bodas de Oro</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <style>
-    .font-script { font-family: 'Great Vibes', cursive; }
-    .font-serif { font-family: 'Playfair Display', serif; }
-    .bg-ivory { background-color: #FCF9F2; }
-    .text-charcoal { color: #2C2A29; }
-    .text-gold { color: #B8860B; }
-    .text-gold-bright { color: #D4AF37; text-shadow: 0px 2px 4px rgba(0,0,0,0.1); }
-    .border-gold { border-color: #D4AF37; }
-    .bg-gold-light { background-color: #FDF8E7; }
-  </style>
-</head>
-<body class="bg-stone-200 flex flex-col items-center justify-center min-h-screen p-4 antialiased selection:bg-yellow-100">
-
-  <div id="vista-invitacion" class="hidden w-full max-w-sm bg-ivory rounded-xl shadow-2xl relative overflow-hidden border-2 border-gold/40">
-    <div class="absolute inset-0 pointer-events-none opacity-[0.04] flex items-center justify-center text-charcoal">
-        <svg viewBox="0 0 512 512" fill="currentColor" class="w-full h-full scale-150 transform translate-y-12"><path d="M256,128 C220,128 192,156 192,192 C192,210 200,226 212,238 C184,260 160,300 160,352 L160,512 L352,512 L352,352 C352,300 328,260 300,238 C312,226 320,210 320,192 C320,156 292,128 256,128 Z" /><circle cx="210" cy="140" r="35" /><circle cx="300" cy="150" r="30" /></svg>
-    </div>
-    <div class="m-3 border-[1px] border-gold/60 rounded-lg p-6 relative z-10 flex flex-col items-center text-center">
-      <h2 class="font-script text-5xl text-gold mb-1">Bodas de Oro</h2>
-      <h1 class="font-serif text-3xl font-bold text-charcoal tracking-wide mb-2">Federico & Jovita</h1>
-      <div class="flex items-center justify-center space-x-2 my-4">
-        <div class="h-px w-8 bg-gold/50"></div>
-        <div class="font-serif text-7xl font-bold text-gold-bright tracking-tighter">50</div>
-        <div class="h-px w-8 bg-gold/50"></div>
-      </div>
-      <p class="font-serif text-sm italic text-charcoal/80 leading-relaxed mb-6 px-2 italic">"Medio siglo de risas, de retos superados y de un amor que brilla más que el oro."</p>
-      <div id="contenido-invitado" class="w-full flex flex-col items-center">
-        <p class="font-serif text-sm tracking-widest text-charcoal uppercase mb-1">Bienvenido(a)</p>
-        <h3 id="nombreMostrado" class="font-serif text-2xl font-bold text-charcoal mb-4 border-b pb-2 border-gold/30 inline-block px-4"></h3>
-        <div class="w-full bg-gold-light border border-gold/40 rounded-lg py-4 mb-6 shadow-sm"><p class="font-serif text-xs uppercase tracking-[0.2em] text-gold font-bold mb-1">Tu Asignación</p><p class="font-serif text-4xl text-charcoal font-bold tracking-widest uppercase">MESA <span id="mesaMostrada"></span></p></div>
-        <div class="w-full bg-white border border-stone-200 rounded-lg p-4 shadow-inner flex flex-row items-center space-x-4">
-          <div id="qrcode" class="bg-white p-1 rounded shrink-0 border border-stone-100 w-[90px] h-[90px] flex items-center justify-center"></div>
-          <div class="text-left flex-1"><p class="font-sans text-[10px] uppercase font-bold text-charcoal mb-1 tracking-wider">Pase de Acceso</p><p class="font-sans text-[10px] text-stone-500 leading-tight">Muestra este código a la hostess para confirmar tu llegada.</p></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="vista-confirmacion" class="hidden w-full max-w-sm bg-white rounded-2xl shadow-2xl p-8 text-center border-4 border-green-500">
-    <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>
-    </div>
-    <h1 class="text-2xl font-bold text-gray-800 mb-2 uppercase tracking-tight">Asistencia Confirmada</h1>
-    <div class="w-full h-px bg-gray-200 my-4"></div>
-    <p class="text-sm text-gray-500 uppercase tracking-widest mb-1 font-bold">Invitado:</p>
-    <p id="hostess-nombre" class="text-2xl font-serif text-gray-800 mb-4"></p>
-    <p class="text-sm text-gray-500 uppercase tracking-widest mb-1 font-bold">Mesa:</p>
-    <p id="hostess-mesa" class="text-6xl font-bold text-green-600 mb-6"></p>
-    <div class="bg-yellow-50 border-2 border-yellow-200 p-4 rounded-xl">
-        <p class="text-yellow-800 font-bold text-sm uppercase mb-1">📍 Indicación para Hostess:</p>
-        <p class="text-yellow-700 text-sm">Tachar de la lista física y permitir el acceso.</p>
-    </div>
-  </div>
-
-  <div id="mensaje-error" class="hidden w-full max-w-sm bg-red-50 p-6 rounded-xl border border-red-200 text-center">
-    <p class="text-red-800 font-serif italic text-lg">No pudimos localizar este pase. Por favor verifica el link.</p>
-  </div>
-
-  <script>
-    // Tu base de datos de invitados (ajustada según correcciones previas)
-    const invitados = [{"id": "fernanda-m1", "nombre": "Fernanda", "mesa": 1}, {"id": "ricardo-m1", "nombre": "Ricardo", "mesa": 1}, {"id": "vianey-m1", "nombre": "Vianey", "mesa": 1}, {"id": "jesus-m1", "nombre": "Jesús", "mesa": 1}, {"id": "brenda-m1", "nombre": "Brenda", "mesa": 1}, {"id": "mateo-m1", "nombre": "Mateo", "mesa": 1}, {"id": "dany-m1", "nombre": "Dany", "mesa": 1}, {"id": "erick-m1", "nombre": "Erick", "mesa": 1}, {"id": "jorge-m1", "nombre": "Jorge", "mesa": 1}, {"id": "flor-m1", "nombre": "FLOR", "mesa": 1}, {"id": "zara-m2", "nombre": "Zara", "mesa": 2}, {"id": "eduardo-m2", "nombre": "Eduardo", "mesa": 2}, {"id": "vianey-m2", "nombre": "Vianey", "mesa": 2}, {"id": "jesus-m2", "nombre": "Jesús", "mesa": 2}, {"id": "arath-m2", "nombre": "Arath", "mesa": 2}, {"id": "majo-leo-m2", "nombre": "Majo Leo", "mesa": 2}, {"id": "carolina-m2", "nombre": "Carolina", "mesa": 2}, {"id": "sharon-m2", "nombre": "Sharon", "mesa": 2}, {"id": "alexa-m2", "nombre": "Alexa", "mesa": 2}, {"id": "andy-m3", "nombre": "Andy", "mesa": 3}, {"id": "arturo-m3", "nombre": "Arturo", "mesa": 3}, {"id": "july-m3", "nombre": "July", "mesa": 3}, {"id": "juan-m3", "nombre": "Juan", "mesa": 3}, {"id": "eduardo-m3", "nombre": "Eduardo", "mesa": 3}, {"id": "vaneza-m3", "nombre": "Vaneza", "mesa": 3}, {"id": "paola-m3", "nombre": "Paola", "mesa": 3}, {"id": "naty-m3", "nombre": "Naty", "mesa": 3}, {"id": "alan-m3", "nombre": "Alan", "mesa": 3}, {"id": "diego-m3", "nombre": "Diego", "mesa": 3}, {"id": "eleazar-m4", "nombre": "Eleazar", "mesa": 4}, {"id": "aby-m4", "nombre": "Aby", "mesa": 4}, {"id": "minerva-m4", "nombre": "Minerva", "mesa": 4}, {"id": "juan-m4", "nombre": "Juan", "mesa": 4}, {"id": "alejandra-m4", "nombre": "Alejandra", "mesa": 4}, {"id": "daniel-m4", "nombre": "Daniel", "mesa": 4}, {"id": "guillermo-m4", "nombre": "Guillermo", "mesa": 4}, {"id": "josue-m4", "nombre": "Josué", "mesa": 4}, {"id": "yaretzi-m4", "nombre": "Yaretzi", "mesa": 4}, {"id": "dani-m4", "nombre": "DANI", "mesa": 4}, {"id": "pancho-m5", "nombre": "Pancho", "mesa": 5}, {"id": "carolina-m5", "nombre": "Carolina", "mesa": 5}, {"id": "lety-m5", "nombre": "Lety", "mesa": 5}, {"id": "alfredo-m5", "nombre": "Alfredo", "mesa": 5}, {"id": "javier-m5", "nombre": "Javier", "mesa": 5}, {"id": "norma-m5", "nombre": "Norma", "mesa": 5}, {"id": "samuel-m5", "nombre": "Samuel", "mesa": 5}, {"id": "vania-m5", "nombre": "Vania", "mesa": 5}, {"id": "hijo-m5", "nombre": "hijo", "mesa": 5}, {"id": "rodolfo-m5", "nombre": "RODOLFO", "mesa": 5}, {"id": "elvira-m6", "nombre": "Elvira", "mesa": 6}, {"id": "agustin-m6", "nombre": "Agustín", "mesa": 6}, {"id": "sra.queta-m6", "nombre": "Sra.Queta", "mesa": 6}, {"id": "nelly-m6", "nombre": "Nelly", "mesa": 6}, {"id": "jazmin-m6", "nombre": "Jazmín", "mesa": 6}, {"id": "izcoatl-m6", "nombre": "Izcóatl", "mesa": 6}, {"id": "sofia-m6", "nombre": "Sofía", "mesa": 6}, {"id": "issac-m6", "nombre": "Issac", "mesa": 6}, {"id": "ximena-m6", "nombre": "Ximena", "mesa": 6}, {"id": "abril-m6", "nombre": "Abril", "mesa": 6}, {"id": "emir-m6", "nombre": "Emir", "mesa": 6}, {"id": "corina-m7", "nombre": "Corina", "mesa": 7}, {"id": "pedro-m7", "nombre": "Pedro", "mesa": 7}, {"id": "diana-m7", "nombre": "Diana", "mesa": 7}, {"id": "mario-m7", "nombre": "Mario", "mesa": 7}, {"id": "mama-de-pedro-m7", "nombre": "Mamá de Pedro", "mesa": 7}, {"id": "papa-de-pedro-m7", "nombre": "Papá de Pedro", "mesa": 7}, {"id": "vale-m7", "nombre": "Vale", "mesa": 7}, {"id": "naty-m7", "nombre": "Naty", "mesa": 7}, {"id": "angel-m7", "nombre": "Ángel", "mesa": 7}, {"id": "mario-chiquito-m7", "nombre": "Mario chiquito", "mesa": 7}, {"id": "penelope-m8", "nombre": "Penélope", "mesa": 8}, {"id": "esposo-m8", "nombre": "Esposo", "mesa": 8}, {"id": "fabiola-m8", "nombre": "Fabiola", "mesa": 8}, {"id": "silvia-m8", "nombre": "Silvia", "mesa": 8}, {"id": "ma.-luisa-m8", "nombre": "Ma. Luisa", "mesa": 8}, {"id": "esposo-m8", "nombre": "esposo", "mesa": 8}, {"id": "ivan-m8", "nombre": "Iván", "mesa": 8}, {"id": "nazarea-m8", "nombre": "Nazarea", "mesa": 8}, {"id": "elizabeth-acevedo-m8", "nombre": "Elizabeth Acevedo", "mesa": 8}, {"id": "2-hijos-m8", "nombre": "2 hijos", "mesa": 8}, {"id": "joana-m9", "nombre": "Joana", "mesa": 9}, {"id": "tania-m9", "nombre": "Tania", "mesa": 9}, {"id": "esposo-m9", "nombre": "esposo", "mesa": 9}, {"id": "moni-mk-m9", "nombre": "Moni mk", "mesa": 9}, {"id": "ma-elena-m9", "nombre": "Ma Elena", "mesa": 9}, {"id": "elsa-m9", "nombre": "Elsa", "mesa": 9}, {"id": "esposo-m9", "nombre": "esposo", "mesa": 9}, {"id": "paty-m10", "nombre": "Paty", "mesa": 10}, {"id": "samuel-m10", "nombre": "Samuel", "mesa": 10}, {"id": "karla-m10", "nombre": "Karla", "mesa": 10}, {"id": "liz-aguilar-m10", "nombre": "Liz Aguilar", "mesa": 10}, {"id": "liz-lopez-m10", "nombre": "Liz López", "mesa": 10}, {"id": "adry-meyer-m10", "nombre": "Adry Meyer", "mesa": 10}, {"id": "adry-m10", "nombre": "Adry", "mesa": 10}, {"id": "leoncito-m10", "nombre": "Leoncito", "mesa": 10}, {"id": "fer-m10", "nombre": "Fer", "mesa": 10}, {"id": "caty-m10", "nombre": "Caty", "mesa": 10}, {"id": "xime-m11", "nombre": "Xime", "mesa": 11}, {"id": "eve-m11", "nombre": "Eve", "mesa": 11}, {"id": "dianita-m11", "nombre": "Dianita", "mesa": 11}, {"id": "ivon-m11", "nombre": "Ivón", "mesa": 11}, {"id": "esposo-m11", "nombre": "Esposo", "mesa": 11}, {"id": "karla-m12", "nombre": "Karla", "mesa": 12}, {"id": "vale-m12", "nombre": "Vale", "mesa": 12}, {"id": "laura-m12", "nombre": "Laura", "mesa": 12}, {"id": "ivan-m12", "nombre": "Iván", "mesa": 12}, {"id": "carlota-m12", "nombre": "Carlota", "mesa": 12}, {"id": "abel-m12", "nombre": "Abel", "mesa": 12}, {"id": "chaya-m13", "nombre": "Chaya", "mesa": 13}, {"id": "chucha-m13", "nombre": "Chucha", "mesa": 13}, {"id": "adriana-m13", "nombre": "Adriana", "mesa": 13}, {"id": "tobi-m13", "nombre": "Tobi", "mesa": 13}, {"id": "viri-m13", "nombre": "Viri", "mesa": 13}, {"id": "salvador-m13", "nombre": "Salvador", "mesa": 13}, {"id": "delia-m13", "nombre": "Delia", "mesa": 13}, {"id": "mama-martha-m15", "nombre": "Mamá Martha", "mesa": 15}, {"id": "patricia-m15", "nombre": "Patricia", "mesa": 15}, {"id": "claudia-m15", "nombre": "Claudia", "mesa": 15}, {"id": "acompanante-m15", "nombre": "Acompañante", "mesa": 15}, {"id": "jesus-dominguez-m15", "nombre": "Jesús Domínguez", "mesa": 15}, {"id": "jesus-m15", "nombre": "Jesús", "mesa": 15}, {"id": "jesus-m15", "nombre": "Jesús", "mesa": 15}, {"id": "yulisa-m15", "nombre": "Yulisa", "mesa": 15}, {"id": "acompanante-m15", "nombre": "Acompañante", "mesa": 15}, {"id": "claudia-trejo-7-m16", "nombre": "Claudia Trejo (7)", "mesa": 16}, {"id": "hugo-m17", "nombre": "Hugo", "mesa": 17}, {"id": "erika-m17", "nombre": "Erika", "mesa": 17}, {"id": "hijo-m17", "nombre": "hijo", "mesa": 17}, {"id": "marlen-m17", "nombre": "Marlen", "mesa": 17}, {"id": "osvaldo-m17", "nombre": "Osvaldo", "mesa": 17}, {"id": "ingrid-m17", "nombre": "Ingrid", "mesa": 17}, {"id": "bibiana-m17", "nombre": "Bibiana", "mesa": 17}, {"id": "isabella-m17", "nombre": "Isabella", "mesa": 17}, {"id": "fernanda-m17", "nombre": "Fernanda", "mesa": 17}, {"id": "ceci-m18", "nombre": "Ceci", "mesa": 18}, {"id": "enrique-m18", "nombre": "Enrique", "mesa": 18}, {"id": "gaby-m18", "nombre": "Gaby", "mesa": 18}, {"id": "ivan-m18", "nombre": "Iván", "mesa": 18}, {"id": "hijo-m18", "nombre": "hijo", "mesa": 18}, {"id": "hija-m18", "nombre": "hija", "mesa": 18}, {"id": "mary-m18", "nombre": "Mary", "mesa": 18}, {"id": "hijo-m18", "nombre": "hijo", "mesa": 18}, {"id": "hija-m18", "nombre": "hija", "mesa": 18}, {"id": "padrino-mario-m19", "nombre": "Padrino Mario", "mesa": 19}, {"id": "liz-m19", "nombre": "Liz", "mesa": 19}, {"id": "gamaliel-m19", "nombre": "Gamaliel", "mesa": 19}, {"id": "mariana-m19", "nombre": "Mariana", "mesa": 19}, {"id": "gabriel-m19", "nombre": "Gabriel", "mesa": 19}, {"id": "majo-m19", "nombre": "Majo", "mesa": 19}, {"id": "sandra-m19", "nombre": "Sandra", "mesa": 19}, {"id": "fernando-m19", "nombre": "Fernando", "mesa": 19}, {"id": "monce-m19", "nombre": "Monce", "mesa": 19}, {"id": "vero-m19", "nombre": "Vero", "mesa": 19}, {"id": "jonathan-m19", "nombre": "JONATHAN", "mesa": 19}, {"id": "maria-m20", "nombre": "María", "mesa": 20}, {"id": "lulu-m20", "nombre": "Lulú", "mesa": 20}, {"id": "tono-m20", "nombre": "Toño", "mesa": 20}, {"id": "hijo-m20", "nombre": "hijo", "mesa": 20}, {"id": "hijo-m20", "nombre": "hijo", "mesa": 20}, {"id": "lorena-m20", "nombre": "Lorena", "mesa": 20}, {"id": "hijo-m20", "nombre": "hijo", "mesa": 20}, {"id": "hija-m20", "nombre": "hija", "mesa": 20}, {"id": "rogelio-y-esposa-m20", "nombre": "Rogelio y Esposa", "mesa": 20}, {"id": "liz-y-melanie-m20", "nombre": "Liz y Melanie", "mesa": 20}, {"id": "mago-m21", "nombre": "Mago", "mesa": 21}, {"id": "juan-m21", "nombre": "Juan", "mesa": 21}, {"id": "alejandra-m21", "nombre": "Alejandra", "mesa": 21}, {"id": "hija-m21", "nombre": "hija", "mesa": 21}, {"id": "hija-m21", "nombre": "hija", "mesa": 21}, {"id": "aurora-m21", "nombre": "Aurora", "mesa": 21}, {"id": "hijo-m21", "nombre": "hijo", "mesa": 21}, {"id": "hijo-m21", "nombre": "hijo", "mesa": 21}, {"id": "hija-m21", "nombre": "hija", "mesa": 21}, {"id": "esposo-m21", "nombre": "esposo", "mesa": 21}, {"id": "lalo-m22", "nombre": "Lalo", "mesa": 22}, {"id": "reina-m22", "nombre": "Reina", "mesa": 22}, {"id": "hija-m22", "nombre": "hija", "mesa": 22}, {"id": "hija-m22", "nombre": "hija", "mesa": 22}, {"id": "hija-m22", "nombre": "hija", "mesa": 22}, {"id": "marilu-m22", "nombre": "Marilú", "mesa": 22}, {"id": "moni-m22", "nombre": "Moni", "mesa": 22}, {"id": "hija-m22", "nombre": "hija", "mesa": 22}, {"id": "hijo-m22", "nombre": "hijo", "mesa": 22}, {"id": "esposo-m22", "nombre": "esposo", "mesa": 22}, {"id": "hortencia-m23", "nombre": "Hortencia", "mesa": 23}, {"id": "miriam-m23", "nombre": "Miriam", "mesa": 23}, {"id": "paco-m23", "nombre": "Paco", "mesa": 23}, {"id": "jazmin-m23", "nombre": "Jazmín", "mesa": 23}, {"id": "enrique-m23", "nombre": "Enrique", "mesa": 23}, {"id": "esposa-m23", "nombre": "esposa", "mesa": 23}, {"id": "daniel-m23", "nombre": "Daniel", "mesa": 23}, {"id": "esposa-m23", "nombre": "Esposa", "mesa": 23}, {"id": "pancho-m23", "nombre": "Pancho", "mesa": 23}, {"id": "malena-m23", "nombre": "MALENA", "mesa": 23}, {"id": "jorge-m24", "nombre": "Jorge", "mesa": 24}, {"id": "monica-m24", "nombre": "Mónica", "mesa": 24}, {"id": "hijo-m24", "nombre": "hijo", "mesa": 24}, {"id": "hijo-m24", "nombre": "hijo", "mesa": 24}, {"id": "patricia-m24", "nombre": "Patricia", "mesa": 24}, {"id": "ileana-m24", "nombre": "Ileana", "mesa": 24}, {"id": "esposo-m24", "nombre": "esposo", "mesa": 24}, {"id": "hija-m24", "nombre": "hija", "mesa": 24}, {"id": "hija-m24", "nombre": "hija", "mesa": 24}, {"id": "beto-m24", "nombre": "Beto", "mesa": 24}, {"id": "chabela-m25", "nombre": "Chabela", "mesa": 25}, {"id": "lety-m25", "nombre": "Lety", "mesa": 25}, {"id": "chabelita-m25", "nombre": "Chabelita", "mesa": 25}, {"id": "lupita-m25", "nombre": "Lupita", "mesa": 25}, {"id": "israel-m25", "nombre": "Israel", "mesa": 25}, {"id": "lupe-m25", "nombre": "Lupe", "mesa": 25}, {"id": "micaela-m25", "nombre": "Micaela", "mesa": 25}, {"id": "jose-luis-m25", "nombre": "Jose Luis", "mesa": 25}, {"id": "mauricio-m25", "nombre": "Mauricio", "mesa": 25}, {"id": "eliza-m25", "nombre": "Eliza", "mesa": 25}, {"id": "luisa-m25", "nombre": "LUISA", "mesa": 25}];
-
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
-    const action = params.get('action');
-
-    // Lógica de Vistas
-    if (id) {
-      const invitado = invitados.find(i => i.id.toLowerCase() === id.toLowerCase());
-
-      if (invitado) {
-        if (action === 'confirm') {
-          // MOSTRAR VISTA HOSTESS
-          document.getElementById('hostess-nombre').innerText = invitado.nombre;
-          document.getElementById('hostess-mesa').innerText = invitado.mesa;
-          document.getElementById('vista-confirmacion').classList.remove('hidden');
-        } else {
-          // MOSTRAR VISTA INVITACIÓN
-          document.getElementById('nombreMostrado').innerText = invitado.nombre;
-          document.getElementById('mesaMostrada').innerText = invitado.mesa;
-          document.getElementById('vista-invitacion').classList.remove('hidden');
-
-          // Generar QR que lleva a la confirmación
-          const urlConfirmacion = window.location.origin + window.location.pathname + "?action=confirm&id=" + invitado.id;
-          new QRCode(document.getElementById("qrcode"), {
-            text: urlConfirmacion,
-            width: 80,
-            height: 80,
-            colorDark : "#2C2A29",
-            colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.M
-          });
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pases de Acceso - Bodas de Oro</title>
+    
+    <!-- Librerías de diseño y tipografías -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --vino: #600000;
         }
-      } else {
-        document.getElementById('mensaje-error').classList.remove('hidden');
-      }
-    } else {
-      document.getElementById('mensaje-error').classList.remove('hidden');
-    }
-  </script>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #fdf2f2;
+            color: #1a1a1a;
+            background-image: linear-gradient(to bottom, #fdf2f2, #f5e6e6);
+        }
+        .font-serif-elegant { font-family: 'Cinzel', serif; }
+        
+        .ticket {
+            position: relative;
+            background: white;
+            padding: 2rem;
+            border: 2px solid var(--vino);
+            max-width: 400px;
+            width: 100%;
+            margin: 0 auto 2rem auto;
+            box-shadow: 0 15px 40px rgba(96,0,0,0.1);
+            border-radius: 4px;
+        }
+        .ticket::before, .ticket::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30px;
+            height: 30px;
+            background: #fdf2f2;
+            border: 2px solid var(--vino);
+            border-radius: 50%;
+            transform: translateY(-50%);
+            z-index: 2;
+        }
+        .ticket::before { left: -16px; border-left-color: transparent; }
+        .ticket::after { right: -16px; border-right-color: transparent; }
+        
+        .ticket-divider { border-top: 2px dashed var(--vino); margin: 1.5rem 0; opacity: 0.2; }
+        .vino-name { color: var(--vino); }
+    </style>
+</head>
+<body>
+    <div id="app-container" class="min-h-screen flex flex-col items-center justify-center p-6 py-12">
+        <!-- El contenido se inyecta con JavaScript -->
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const container = document.getElementById('app-container');
+
+        // ========================================================
+        // MODO 1: VALIDACIÓN (Pantalla Verde para la Hostess)
+        // ========================================================
+        if (urlParams.get('validar') === 'true') {
+            const inv = decodeURIComponent(urlParams.get('invitado') || 'Invitado');
+            const mes = decodeURIComponent(urlParams.get('mesa') || 'Mesa por asignar');
+
+            container.innerHTML = `
+                <div class="bg-white p-10 rounded-2xl shadow-2xl border-4 border-[#600000] w-full max-w-sm text-center relative animate-fade-in">
+                    <div class="text-7xl mb-4 drop-shadow-lg">✅</div>
+                    <h2 class="font-serif-elegant text-[#600000] text-3xl mb-2 font-bold uppercase tracking-wide">Acceso Permitido</h2>
+                    <p class="text-[10px] uppercase text-gray-400 tracking-[0.2em] mb-6">Bodas de Oro Fede & Jovita</p>
+                    
+                    <div class="border-t-2 border-dashed border-[#600000] opacity-20 my-6"></div>
+                    
+                    <p class="text-[11px] text-gray-500 uppercase tracking-[0.2em] mb-2 font-semibold">Invitado</p>
+                    <p class="font-serif-elegant text-2xl font-bold mb-6 text-gray-800">${inv}</p>
+                    
+                    <div class="bg-[#600000] text-white py-4 rounded-xl mb-6 shadow-inner">
+                        <p class="text-3xl font-bold tracking-widest uppercase m-0">${mes}</p>
+                    </div>
+                </div>
+            `;
+        } 
+        
+        // ========================================================
+        // MODO 2: VISUALIZACIÓN DEL INVITADO (Boletos y QR)
+        // ========================================================
+        else {
+            let idParam = urlParams.get('id');
+            
+            if (!idParam) {
+                container.innerHTML = `
+                    <div class="bg-white p-10 rounded-2xl shadow-xl text-center max-w-sm">
+                        <h2 class="text-2xl font-bold text-red-700 mb-4">Enlace Inválido</h2>
+                        <p class="text-gray-600">Por favor verifica que el enlace esté completo o contacta a los organizadores.</p>
+                    </div>
+                `;
+            } else {
+                // Limpiamos espacios en blanco accidentales
+                idParam = idParam.trim();
+
+                // Fórmula mágica: Busca todo hasta llegar a "-m" seguido de números
+                // Esto permite que apellidos con "M" no rompan el sistema.
+                const match = idParam.match(/^(.*?)-m(\d+)$/i);
+                
+                if (match) {
+                    // Extraemos el nombre y limpiamos guiones
+                    const nombreEnBruto = match[1].replace(/-/g, ' ');
+                    
+                    // Capitalizamos el nombre para que se vea elegante (ej. fernanda robles -> Fernanda Robles)
+                    const nombreLimpio = nombreEnBruto.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                    
+                    // Extraemos la mesa
+                    const numMesa = match[2];
+                    const textoMesa = `Mesa ${numMesa}`;
+                    
+                    // Toma la URL base para generar el QR dinámico que escaneará la hostess
+                    const baseUrl = window.location.href.split('?')[0];
+
+                    let html = `<h2 class="font-serif-elegant text-4xl text-center vino-name mb-10 uppercase font-bold drop-shadow-sm">Pase de Acceso</h2>`;
+
+                    // Link exacto al que te lleva el QR cuando la hostess lo escanea
+                    const enlaceValidacion = `${baseUrl}?validar=true&invitado=${encodeURIComponent(nombreLimpio)}&mesa=${encodeURIComponent(textoMesa)}`;
+                    const qrData = encodeURIComponent(enlaceValidacion);
+                    
+                    // Generador de QR oficial
+                    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&color=600000&data=${qrData}`;
+
+                    html += `
+                        <div class="ticket">
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="font-serif-elegant text-[10px] uppercase text-gray-500 font-bold tracking-wider">Bodas de Oro</span>
+                                <span class="font-serif-elegant text-[10px] uppercase text-gray-500 font-bold tracking-wider">31.05.2026</span>
+                            </div>
+                            <h4 class="font-serif-elegant text-2xl mb-1 vino-name text-center font-bold">Fede & Jovita</h4>
+                            <div class="ticket-divider"></div>
+                            
+                            <p class="font-serif-elegant text-2xl vino-name mb-1 text-center font-bold leading-tight mt-4">${nombreLimpio}</p>
+                            <p class="text-[16px] uppercase text-gray-800 font-bold tracking-[0.1em] mb-4 text-center mt-2">${textoMesa}</p>
+                            
+                            <div class="ticket-divider"></div>
+                            <div class="flex flex-col items-center gap-3 mt-4">
+                                <img src="${qrUrl}" alt="QR Code" class="w-44 h-44 p-2 border-2 border-gray-100 shadow-sm rounded-lg bg-white">
+                                <p class="text-[9px] uppercase tracking-[0.3em] text-gray-400 italic text-center mt-2">Mostrar a la hostess en recepción</p>
+                            </div>
+                        </div>
+                    `;
+                    
+                    container.innerHTML = html;
+                } else {
+                    // Pantalla de error con información para depurar
+                    container.innerHTML = `
+                        <div class="bg-white p-10 rounded-2xl shadow-xl text-center max-w-sm">
+                            <h2 class="text-2xl font-bold text-red-700 mb-4">Pase no encontrado</h2>
+                            <p class="text-gray-600 mb-4">No pudimos localizar este pase. Verifica tu enlace de WhatsApp.</p>
+                            <div class="bg-gray-100 text-xs text-gray-500 p-3 rounded break-all border border-gray-200 mt-4">
+                                <b>Error:</b> Formato incorrecto.<br>
+                                Texto leído: <span class="text-red-800 font-mono">${idParam}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        }
+    </script>
 </body>
 </html>
